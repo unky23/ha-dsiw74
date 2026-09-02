@@ -1,0 +1,12 @@
+name: Feature request
+description: Suggest an improvement for the Sagemcom DSIW74 integration
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: feature
+    attributes:
+      label: Requested feature
+      description: Describe what you would like the integration to do.
+    validations:
+      required: true

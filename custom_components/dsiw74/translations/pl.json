@@ -1,0 +1,50 @@
+{
+  "title": "Sagemcom DSIW74",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Dodaj dekoder Sagemcom DSIW74",
+        "description": "Połączenie z lokalnym API dekodera CANAL+, konfiguracja encodera HDMI, media playera do śledzenia i edytowalnych presetów kanałów. Nazwa kanału w media playerze może automatycznie wywoływać preset o tej samej nazwie.",
+        "data": {
+          "host": "Adres IP DSIW74",
+          "port": "Port DSIW74",
+          "name": "Nazwa urządzenia",
+          "encoder_url": "Adres URL encodera HDMI",
+          "username": "Login encodera",
+          "password": "Hasło encodera",
+          "channel_presets": "Presety kanałów (numer = nazwa)",
+          "media_player_entity": "Media player do śledzenia",
+          "auto_sync_channel": "Automatycznie synchronizuj kanał DSIW74"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nie można połączyć się z dekoderem.",
+      "unsupported_device": "Urządzenie odpowiada, ale nie jest Sagemcomem DSIW74.",
+      "invalid_presets": "Nieprawidłowa lista presetów. Każdy kanał wpisz w osobnej linii jako: numer = nazwa. Numery i nazwy muszą być unikalne.",
+      "unknown": "Wystąpił nieoczekiwany błąd."
+    },
+    "abort": {
+      "already_configured": "Ten dekoder jest już skonfigurowany."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Ustawienia DSIW74",
+        "description": "Edytuj dane encodera HDMI, media player do śledzenia i presety kanałów. Gdy automatyczna synchronizacja jest włączona, zmiana nazwy kanału w media playerze na nazwę presetu spowoduje wysłanie numeru kanału do DSIW74.",
+        "data": {
+          "encoder_url": "Adres URL encodera HDMI",
+          "username": "Login encodera",
+          "password": "Hasło encodera",
+          "channel_presets": "Presety kanałów (numer = nazwa)",
+          "media_player_entity": "Media player do śledzenia",
+          "auto_sync_channel": "Automatycznie synchronizuj kanał DSIW74"
+        }
+      }
+    },
+    "error": {
+      "invalid_presets": "Nieprawidłowa lista presetów. Użyj formatu: numer = nazwa, po jednej linii."
+    }
+  }
+}
