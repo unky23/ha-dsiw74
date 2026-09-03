@@ -14,6 +14,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.event import async_track_state_change_event
 
 from .api import DSIW74Client, DSIW74ConnectionError, DSIW74DeviceInfo
+from .encoder import HDMIEncoderClient
 from .const import (
     CONF_AUTO_SYNC_CHANNEL,
     CONF_CHANNEL_PRESETS,
@@ -38,6 +39,7 @@ class DSIW74RuntimeData:
     encoder_url: str
     encoder_username: str
     encoder_password: str
+    encoder_client: HDMIEncoderClient | None
     presets: tuple[ChannelPreset, ...]
     media_player_entity: str
     auto_sync_channel: bool
@@ -155,12 +157,27 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     except ValueError:
         presets = parse_presets(DEFAULT_PRESETS_TEXT)
 
+    encoder_url = _entry_value(entry, CONF_ENCODER_URL, DEFAULT_ENCODER_URL).rstrip("/")
+    encoder_username = _entry_value(entry, CONF_USERNAME)
+    encoder_password = _entry_value(entry, CONF_PASSWORD)
+    encoder_client = (
+        HDMIEncoderClient(
+            encoder_url,
+            encoder_username,
+            encoder_password,
+            async_get_clientsession(hass),
+        )
+        if encoder_url
+        else None
+    )
+
     entry.runtime_data = DSIW74RuntimeData(
         client=client,
         info=info,
-        encoder_url=_entry_value(entry, CONF_ENCODER_URL, DEFAULT_ENCODER_URL).rstrip("/"),
-        encoder_username=_entry_value(entry, CONF_USERNAME),
-        encoder_password=_entry_value(entry, CONF_PASSWORD),
+        encoder_url=encoder_url,
+        encoder_username=encoder_username,
+        encoder_password=encoder_password,
+        encoder_client=encoder_client,
         presets=presets,
         media_player_entity=_entry_value(entry, CONF_MEDIA_PLAYER_ENTITY),
         auto_sync_channel=_entry_bool(

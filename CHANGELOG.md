@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.0
+
+- Added real ON/standby detection through the configured HDMI encoder `/get_status` endpoint.
+- Added HTTP Digest authentication support for the encoder.
+- `remote.turn_on` and `remote.turn_off` are now idempotent: `KeyStandBy` is sent only when the HDMI-derived state shows it is required.
+- The raw `remote.toggle` behavior remains available.
+- Added remote diagnostic attributes for encoder availability and HDMI input frame rate.
+
 ## 0.5.1
 
 - Replace the integration icon with the C+ logo.

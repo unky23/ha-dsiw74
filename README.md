@@ -6,6 +6,9 @@ The integration communicates locally with the decoder over HTTP, creates a Home 
 
 ## Features
 
+- Real ON/standby state from the HDMI encoder (`/get_status`, `video_ok`).
+- Safe `turn_on` / `turn_off` despite the decoder exposing only a standby toggle.
+
 - UI configuration through **Settings → Devices & services**.
 - Local decoder API: `GET /system/version` and `POST /control/rcu`.
 - Default DSIW74 API port: `3030`.
