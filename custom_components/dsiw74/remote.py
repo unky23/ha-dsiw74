@@ -65,7 +65,7 @@ class DSIW74Remote(DSIW74Entity, RemoteEntity):
 
     async def _async_read_power_state(self) -> bool | None:
         """Read ON/standby from encoder vi id=0/video_ok."""
-        encoder = self.runtime.encoder_client
+        encoder = self._runtime.encoder_client
         if encoder is None:
             self._encoder_available = False
             self._input_framerate = None

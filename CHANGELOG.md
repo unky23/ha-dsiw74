@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.1
+
+- Fix remote entity setup after adding HDMI encoder power-state polling.
+- Use the shared runtime object correctly when reading encoder state.
+
 ## 0.6.0
 
 - Added real ON/standby detection through the configured HDMI encoder `/get_status` endpoint.
