@@ -34,6 +34,7 @@ git diff --cached --quiet
 
 if ($LASTEXITCODE -eq 1) {
     git commit -m "Release $tag"
+
     if ($LASTEXITCODE -ne 0) {
         throw "git commit nie powiodl sie."
     }
@@ -45,17 +46,22 @@ else {
     throw "Blad podczas sprawdzania zmian Git."
 }
 
-# Push main
+# Push brancha main
+Write-Host "Wysylanie main..."
 git push origin main
+
 if ($LASTEXITCODE -ne 0) {
     throw "git push main nie powiodl sie."
 }
 
-# Utworzenie taga, jeśli jeszcze nie istnieje
+# Sprawdzenie, czy tag istnieje lokalnie
 $existingTag = git tag --list $tag
 
 if (-not $existingTag) {
+    Write-Host "Tworzenie taga $tag..."
+
     git tag $tag
+
     if ($LASTEXITCODE -ne 0) {
         throw "Nie udalo sie utworzyc taga $tag."
     }
@@ -65,15 +71,29 @@ else {
 }
 
 # Push taga
+Write-Host "Wysylanie taga $tag..."
+
 git push origin $tag
+
 if ($LASTEXITCODE -ne 0) {
     throw "Nie udalo sie wyslac taga $tag."
 }
 
-# GitHub Release
-gh release view $tag --repo unky23/ha-dsiw74 *> $null
+# Sprawdzenie, czy GitHub Release już istnieje
+Write-Host "Sprawdzanie GitHub Release..."
+
+$existingRelease = gh release list `
+    --repo unky23/ha-dsiw74 `
+    --json tagName `
+    --jq ".[] | select(.tagName == `"$tag`") | .tagName"
 
 if ($LASTEXITCODE -ne 0) {
+    throw "Nie udalo sie pobrac listy GitHub Releases."
+}
+
+if (-not $existingRelease) {
+    Write-Host "Tworzenie GitHub Release $tag..."
+
     gh release create $tag `
         --repo unky23/ha-dsiw74 `
         --title "DSIW74 $tag" `
