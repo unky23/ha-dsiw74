@@ -1,68 +1,63 @@
-# Sagemcom DSIW74 for Home Assistant
+# CANAL+ Decoder for Home Assistant
 
-Custom Home Assistant integration for the CANAL+ / nc+ **Sagemcom DSIW74 (wifiBOX+)** local network remote API.
+Custom Home Assistant integration for compatible CANAL+ / nc+ satellite decoders exposing the local HTTP remote-control API.
 
-The integration communicates locally with the decoder over HTTP, creates a Home Assistant remote, individual remote-control buttons, configurable channel presets and can automatically keep the DSIW74 channel synchronized with another `media_player` entity.
+The integration keeps the internal Home Assistant domain `dsiw74` for backward compatibility with existing installations and entity IDs, but the visible integration name is now **CANAL+ Decoder** / **Dekoder CANAL+**.
+
+## Confirmed decoder models
+
+- Sagemcom **DSIW74** (wifiBOX+) — API port `3030`
+- ADB **NCP3670SF / NCP-3670SF** (4K UltraBOX+) — API port `8080`
+- ADB **NCP4740SF / NCP-4740SF** (WiFi PremiumBOX+) — API port `8080`
+- Technicolor **USW4001NCP** (4K UltraBOX+) — compatible model accepted by the integration
+
+The decoder is verified using `GET /system/version`. The `Serial` HTTP header is used as the unique identifier.
 
 ## Features
 
-- Real ON/standby state from the HDMI encoder (`/get_status`, `video_ok`).
-- Safe `turn_on` / `turn_off` despite the decoder exposing only a standby toggle.
-
-- UI configuration through **Settings → Devices & services**.
-- Local decoder API: `GET /system/version` and `POST /control/rcu`.
-- Default DSIW74 API port: `3030`.
-- `remote` entity supporting native `Key...` commands and friendly aliases.
-- Individual Home Assistant buttons for the full remote control.
+- Local decoder control using `POST /control/rcu`.
+- `remote` entity with native `Key...` commands and friendly aliases.
+- Individual remote-control buttons.
 - Editable numeric channel presets.
-- Preset `select` entity for automations.
-- Automatic channel synchronization from a chosen `media_player`.
-- HDMI encoder URL, username and password stored for planned HDMI-frame based ON/STANDBY detection.
+- Preset `select` entity.
+- Automatic channel synchronization from a selected Home Assistant `media_player`.
+- Real ON/standby state from a configured HDMI encoder (`/get_status`, `vi id=0`, `video_ok`).
+- Safe `remote.turn_on` / `remote.turn_off`: the standby toggle is sent only when the HDMI-derived state requires it.
 - Polish and English UI translations.
 
 ## Installation with HACS
 
 1. Open **HACS**.
-2. Open the menu in the upper-right corner and choose **Custom repositories**.
-3. Add:
-
-   `https://github.com/unky23/ha-dsiw74`
-
-4. Select category **Integration**.
-5. Install **Sagemcom DSIW74**.
-6. Restart Home Assistant.
-7. Go to **Settings → Devices & services → Add integration → Sagemcom DSIW74**.
+2. Add custom repository: `https://github.com/unky23/ha-dsiw74` as **Integration**.
+3. Install **CANAL+ Decoder**.
+4. Restart Home Assistant.
+5. Go to **Settings → Devices & services → Add integration → CANAL+ Decoder**.
 
 ## Manual installation
 
-Copy:
+Copy `custom_components/dsiw74` to `/config/custom_components/dsiw74` and restart Home Assistant.
 
-`custom_components/dsiw74`
-
-to:
-
-`/config/custom_components/dsiw74`
-
-and restart Home Assistant.
-
-## Initial configuration
+## Configuration
 
 The integration asks for:
 
-- DSIW74 IP address,
-- DSIW74 HTTP port (default `3030`),
+- decoder IP address,
+- decoder HTTP API port,
 - device name,
-- HDMI encoder URL,
-- encoder username and password,
+- HDMI encoder URL and optional credentials,
 - optional `media_player` to follow,
-- automatic channel synchronization toggle,
+- automatic channel synchronization,
 - editable channel presets.
 
-The decoder is verified using `/system/version` and its `Serial` HTTP header is used as the unique identifier.
+Typical ports are:
 
-## Channel presets
+```text
+wifiBOX+ DSIW74      3030
+4K UltraBOX+         8080
+WiFi PremiumBOX+     8080
+```
 
-Presets are edited under **Configure** using one line per channel:
+## Default channel presets
 
 ```text
 1 = CANAL+ Sport 1
@@ -78,31 +73,15 @@ Presets are edited under **Configure** using one line per channel:
 11 = CANAL+ Extra 4
 ```
 
-The names and numbers are fully editable. Multi-digit numbers are sent as consecutive remote-control digit presses.
+Presets are fully editable. Multi-digit channel numbers are sent as consecutive remote-control digit presses.
 
 ## Automatic channel synchronization
 
-Choose a **media player to follow** and enable automatic synchronization. When the media player changes state, the integration checks, in order:
+When a media player is selected, the integration checks `media_channel`, then `media_title`, then `source`. If the value matches a preset name (case-insensitive), the corresponding numeric channel is sent to the decoder. Duplicate unrelated media-player updates do not repeatedly retune the same preset.
 
-1. `media_channel`
-2. `media_title`
-3. `source`
+## Automation examples
 
-If the value matches a configured preset name (case-insensitive), the numeric preset is sent to the DSIW74.
-
-Example:
-
-```text
-media_player channel: CANAL+ Extra 4
-preset:               CANAL+ Extra 4 = 11
-DSIW74 keys:           KeyOne → KeyOne
-```
-
-Unrelated media-player state updates do not cause repeated retunes when the matched channel has not changed.
-
-## Automation example
-
-A preset can also be selected directly:
+Select a channel preset:
 
 ```yaml
 action: select.select_option
@@ -112,7 +91,7 @@ data:
   option: "CANAL+ Sport 1"
 ```
 
-Native remote commands can be sent through the `remote` entity:
+Send a remote key:
 
 ```yaml
 action: remote.send_command
@@ -122,32 +101,34 @@ data:
   command: KeyMenu
 ```
 
-Friendly aliases such as `menu`, `guide`, `ch+`, `ch-`, `1`, `2`, `power` are also supported.
+Friendly aliases such as `menu`, `guide`, `ch+`, `ch-`, `1`, `2`, and `power` are also supported.
 
-## Known limitations
+## Power-state detection
 
-- The DSIW74 network API does **not** expose a reliable ON/STANDBY state.
-- `/system/version`, TCP port 3030 and the nc+ SSDP service remain available while the decoder is in standby.
-- Therefore the power button currently behaves like the physical remote: it sends `KeyStandBy` as a toggle.
-- HDMI encoder credentials are already configurable, but HDMI-frame based power-state detection is not implemented yet.
-- The current channel displayed by the preset `select` represents the last channel sent by this integration, not a channel read back from the decoder.
+The CANAL+ decoder network API does not expose a reliable ON/standby state on the confirmed models. The integration therefore optionally polls the configured HDMI encoder and uses `video_ok` from input `vi id=0` as the real power-state source.
 
-## DSIW74 local API
+Without a working HDMI encoder state, `remote.turn_on` and `remote.turn_off` cannot safely distinguish ON from standby. The raw standby toggle remains available through `remote.toggle` / `KeyStandBy`.
+
+## Local API
 
 Device information:
 
 ```text
-GET http://DECODER_IP:3030/system/version
+GET http://DECODER_IP:PORT/system/version
 ```
 
 Remote key:
 
 ```text
-POST http://DECODER_IP:3030/control/rcu
+POST http://DECODER_IP:PORT/control/rcu
 Content-Type: application/x-www-form-urlencoded
 
 Keypress=KeyMenu
 ```
+
+## Backward compatibility
+
+The integration folder, domain, Python class names and existing entity unique IDs remain based on `dsiw74`. This is intentional so upgrading from older versions does not create a second integration or break existing automations.
 
 ## License
 

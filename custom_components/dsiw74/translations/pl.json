@@ -1,26 +1,26 @@
 {
-  "title": "Sagemcom DSIW74",
+  "title": "Dekoder CANAL+",
   "config": {
     "step": {
       "user": {
-        "title": "Dodaj dekoder Sagemcom DSIW74",
-        "description": "Połączenie z lokalnym API dekodera CANAL+, konfiguracja encodera HDMI, media playera do śledzenia i edytowalnych presetów kanałów. Nazwa kanału w media playerze może automatycznie wywoływać preset o tej samej nazwie.",
+        "title": "Dodaj dekoder CANAL+",
+        "description": "Połączenie z lokalnym API dekodera CANAL+. Typowe porty API: wifiBOX+ DSIW74 = 3030, UltraBOX+/PremiumBOX+ = 8080. Możesz też skonfigurować encoder HDMI, media player do śledzenia i edytowalne presety kanałów.",
         "data": {
-          "host": "Adres IP DSIW74",
-          "port": "Port DSIW74",
+          "host": "Adres IP dekodera",
+          "port": "Port API dekodera",
           "name": "Nazwa urządzenia",
           "encoder_url": "Adres URL encodera HDMI",
           "username": "Login encodera",
           "password": "Hasło encodera",
           "channel_presets": "Presety kanałów (numer = nazwa)",
           "media_player_entity": "Media player do śledzenia",
-          "auto_sync_channel": "Automatycznie synchronizuj kanał DSIW74"
+          "auto_sync_channel": "Automatycznie synchronizuj kanał dekodera"
         }
       }
     },
     "error": {
       "cannot_connect": "Nie można połączyć się z dekoderem.",
-      "unsupported_device": "Urządzenie odpowiada, ale nie jest Sagemcomem DSIW74.",
+      "unsupported_device": "Urządzenie odpowiada, ale jego model nie jest obsługiwany przez tę integrację CANAL+.",
       "invalid_presets": "Nieprawidłowa lista presetów. Każdy kanał wpisz w osobnej linii jako: numer = nazwa. Numery i nazwy muszą być unikalne.",
       "unknown": "Wystąpił nieoczekiwany błąd."
     },
@@ -31,15 +31,15 @@
   "options": {
     "step": {
       "init": {
-        "title": "Ustawienia DSIW74",
-        "description": "Edytuj dane encodera HDMI, media player do śledzenia i presety kanałów. Gdy automatyczna synchronizacja jest włączona, zmiana nazwy kanału w media playerze na nazwę presetu spowoduje wysłanie numeru kanału do DSIW74.",
+        "title": "Ustawienia dekodera CANAL+",
+        "description": "Edytuj dane encodera HDMI, media player do śledzenia i presety kanałów. Gdy automatyczna synchronizacja jest włączona, zmiana nazwy kanału w media playerze na nazwę presetu spowoduje wysłanie numeru kanału do dekodera.",
         "data": {
           "encoder_url": "Adres URL encodera HDMI",
           "username": "Login encodera",
           "password": "Hasło encodera",
           "channel_presets": "Presety kanałów (numer = nazwa)",
           "media_player_entity": "Media player do śledzenia",
-          "auto_sync_channel": "Automatycznie synchronizuj kanał DSIW74"
+          "auto_sync_channel": "Automatycznie synchronizuj kanał dekodera"
         }
       }
     },

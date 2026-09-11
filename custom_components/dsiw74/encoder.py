@@ -1,4 +1,4 @@
-"""HDMI encoder client used to determine the DSIW74 power state."""
+"""HDMI encoder client used to determine CANAL+ decoder power state."""
 
 from __future__ import annotations
 

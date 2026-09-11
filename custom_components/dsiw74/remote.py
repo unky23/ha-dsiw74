@@ -1,4 +1,4 @@
-"""Remote platform for Sagemcom DSIW74."""
+"""Remote platform for compatible CANAL+ decoders."""
 
 from __future__ import annotations
 
@@ -30,12 +30,12 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up the DSIW74 remote entity."""
+    """Set up the CANAL+ decoder remote entity."""
     async_add_entities([DSIW74Remote(entry)], update_before_add=True)
 
 
 class DSIW74Remote(DSIW74Entity, RemoteEntity):
-    """Representation of the DSIW74 network remote."""
+    """Representation of the CANAL+ decoder network remote."""
 
     _attr_name = "Pilot"
     _attr_icon = "mdi:remote-tv"
@@ -98,7 +98,7 @@ class DSIW74Remote(DSIW74Entity, RemoteEntity):
         current = await self._async_read_power_state()
         if current is None:
             raise HomeAssistantError(
-                "Cannot determine DSIW74 ON/standby state from the HDMI encoder. "
+                "Cannot determine decoder ON/standby state from the HDMI encoder. "
                 "Use remote.toggle if you intentionally want to send the raw standby toggle."
             )
         if current == turn_on:
@@ -109,7 +109,7 @@ class DSIW74Remote(DSIW74Entity, RemoteEntity):
         try:
             await self._client.async_send_key("KeyStandBy")
         except DSIW74ConnectionError as err:
-            raise HomeAssistantError(f"DSIW74 communication error: {err}") from err
+            raise HomeAssistantError(f"CANAL+ decoder communication error: {err}") from err
 
         # The HDMI link does not change instantaneously. Poll briefly so the UI
         # reflects the new state without waiting for the next normal HA poll.
@@ -133,16 +133,16 @@ class DSIW74Remote(DSIW74Entity, RemoteEntity):
         await self._async_set_power(False)
 
     async def async_toggle(self, **kwargs: Any) -> None:
-        """Send the raw DSIW74 standby toggle."""
+        """Send the raw decoder standby toggle."""
         try:
             await self._client.async_send_key("KeyStandBy")
         except DSIW74ConnectionError as err:
-            raise HomeAssistantError(f"DSIW74 communication error: {err}") from err
+            raise HomeAssistantError(f"CANAL+ decoder communication error: {err}") from err
 
     async def async_send_command(
         self, command: Iterable[str], **kwargs: Any
     ) -> None:
-        """Send one or more DSIW74 remote-control commands."""
+        """Send one or more decoder remote-control commands."""
         repeats = int(kwargs.get(ATTR_NUM_REPEATS, 1))
         delay = float(kwargs.get(ATTR_DELAY_SECS, DEFAULT_DELAY_SECS))
 
@@ -155,4 +155,4 @@ class DSIW74Remote(DSIW74Entity, RemoteEntity):
         except DSIW74InvalidCommand as err:
             raise HomeAssistantError(str(err)) from err
         except DSIW74ConnectionError as err:
-            raise HomeAssistantError(f"DSIW74 communication error: {err}") from err
+            raise HomeAssistantError(f"CANAL+ decoder communication error: {err}") from err

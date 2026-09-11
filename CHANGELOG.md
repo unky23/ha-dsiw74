@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.0
+
+- Rename the visible integration to **CANAL+ Decoder** / **Dekoder CANAL+**.
+- Keep the internal `dsiw74` domain and existing entity IDs for backward compatibility.
+- Add support for the ADB NCP3670SF / NCP-3670SF 4K UltraBOX+ local API on port 8080.
+- Accept additional compatible CANAL+ decoder models: DSIW74, NCP4740SF and USW4001NCP.
+- Make all user-facing configuration labels and errors decoder-generic instead of Sagemcom-specific.
+- Document model-specific API ports and current HDMI encoder power-state behavior.
+
 ## 0.6.1
 
 - Fix remote entity setup after adding HDMI encoder power-state polling.

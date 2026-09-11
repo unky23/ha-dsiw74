@@ -1,4 +1,4 @@
-"""HTTP client for Sagemcom DSIW74 local API."""
+"""HTTP client for compatible CANAL+ decoder local APIs."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import json
 
 from aiohttp import ClientError, ClientSession, ClientTimeout
 
-from .const import COMMAND_ALIASES, DEFAULT_TIMEOUT, RAW_COMMANDS
+from .const import COMMAND_ALIASES, DEFAULT_TIMEOUT, RAW_COMMANDS, SUPPORTED_MODELS
 
 
 class DSIW74Error(Exception):
@@ -24,7 +24,7 @@ class DSIW74InvalidCommand(DSIW74Error):
 
 
 class DSIW74UnsupportedDevice(DSIW74Error):
-    """Raised when the endpoint is not a DSIW74."""
+    """Raised when the endpoint is not a supported CANAL+ decoder."""
 
 
 @dataclass(slots=True)
@@ -41,7 +41,7 @@ class DSIW74DeviceInfo:
 
 
 class DSIW74Client:
-    """Client for the DSIW74 web service."""
+    """Client for the compatible CANAL+ decoder web service."""
 
     def __init__(self, host: str, port: int, session: ClientSession) -> None:
         self.host = host
@@ -77,18 +77,19 @@ class DSIW74Client:
 
         model = str(data.get("model", "")).strip()
         manufacturer = str(data.get("manufacturer", "")).strip()
-        if model.upper() != "DSIW74":
+        model_key = model.upper().replace("-", "").replace(" ", "")
+        if model_key not in SUPPORTED_MODELS:
             raise DSIW74UnsupportedDevice(
-                f"Expected DSIW74, got {manufacturer} {model}".strip()
+                f"Unsupported CANAL+ decoder: {manufacturer} {model}".strip()
             )
         if not serial:
             raise DSIW74ConnectionError("Decoder did not return Serial header")
 
         return DSIW74DeviceInfo(
             serial=serial,
-            manufacturer=manufacturer or "Sagemcom",
+            manufacturer=manufacturer or "CANAL+",
             model=model,
-            friendly_name=str(data.get("friendly_name", "DEKODER CANAL+")).strip(),
+            friendly_name=str(data.get("friendly_name", "Dekoder CANAL+")).strip(),
             internal_version=str(data.get("internal_version", "")).strip(),
             external_version=str(data.get("external_version", "")).strip(),
             release=str(data.get("release", "")).strip(),
@@ -105,7 +106,7 @@ class DSIW74Client:
         if alias is not None:
             return alias
 
-        raise DSIW74InvalidCommand(f"Unsupported DSIW74 command: {command}")
+        raise DSIW74InvalidCommand(f"Unsupported decoder command: {command}")
 
     async def async_send_key(self, command: str) -> None:
         """Send one remote-control key."""

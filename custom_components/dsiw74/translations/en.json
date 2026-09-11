@@ -1,27 +1,27 @@
 {
-  "title": "Sagemcom DSIW74",
+  "title": "CANAL+ Decoder",
   "config": {
     "step": {
       "user": {
-        "title": "Add Sagemcom DSIW74 decoder",
-        "description": "Connect to the local CANAL+ decoder API and configure the HDMI encoder, media player to follow and editable channel presets. A media-player channel name can automatically trigger a preset with the same name.",
+        "title": "Add CANAL+ decoder",
+        "description": "Connect to the local CANAL+ decoder API. Typical API ports: wifiBOX+ DSIW74 = 3030, UltraBOX+/PremiumBOX+ = 8080. You can also configure the HDMI encoder, media player to follow and editable channel presets.",
         "data": {
-          "host": "DSIW74 IP address",
-          "port": "DSIW74 port",
+          "host": "Decoder IP address",
+          "port": "Decoder API port",
           "name": "Device name",
           "encoder_url": "HDMI encoder URL",
           "username": "Encoder username",
           "password": "Encoder password",
           "channel_presets": "Channel presets (number = name)",
           "media_player_entity": "Media player to follow",
-          "auto_sync_channel": "Automatically sync DSIW74 channel"
+          "auto_sync_channel": "Automatically sync decoder channel"
         }
       }
     },
     "error": {
       "cannot_connect": "Cannot connect to the decoder.",
-      "unsupported_device": "The device responded, but it is not a Sagemcom DSIW74.",
-      "invalid_presets": "Invalid preset list. Enter each channel on a separate line as: number = name. Names and numbers must be unique.",
+      "unsupported_device": "The device responded, but its model is not supported by this CANAL+ integration.",
+      "invalid_presets": "Invalid preset list. Use one unique channel per line in the format: number = name.",
       "unknown": "An unexpected error occurred."
     },
     "abort": {
@@ -31,15 +31,15 @@
   "options": {
     "step": {
       "init": {
-        "title": "DSIW74 settings",
-        "description": "Edit HDMI encoder credentials, source media player and channel presets. When automatic sync is enabled, a media-player channel name matching a preset automatically tunes the corresponding DSIW74 channel.",
+        "title": "CANAL+ decoder settings",
+        "description": "Edit HDMI encoder credentials, source media player and channel presets. When automatic sync is enabled, a media-player channel name matching a preset automatically tunes the corresponding decoder channel.",
         "data": {
           "encoder_url": "HDMI encoder URL",
           "username": "Encoder username",
           "password": "Encoder password",
           "channel_presets": "Channel presets (number = name)",
           "media_player_entity": "Media player to follow",
-          "auto_sync_channel": "Automatically sync DSIW74 channel"
+          "auto_sync_channel": "Automatically sync decoder channel"
         }
       }
     },

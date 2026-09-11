@@ -1,4 +1,4 @@
-"""Sagemcom DSIW74 integration."""
+"""CANAL+ decoder integration."""
 
 from __future__ import annotations
 
@@ -112,7 +112,7 @@ def _setup_media_player_sync(hass: HomeAssistant, entry: ConfigEntry) -> None:
             return
 
         _LOGGER.debug(
-            "Media player %s changed to preset %s via %s; tuning DSIW74 channel %s",
+            "Media player %s changed to preset %s via %s; tuning decoder channel %s",
             runtime.media_player_entity,
             new_preset.name,
             matched_attribute,
@@ -122,7 +122,7 @@ def _setup_media_player_sync(hass: HomeAssistant, entry: ConfigEntry) -> None:
             await runtime.async_tune_preset(new_preset)
         except DSIW74ConnectionError as err:
             _LOGGER.warning(
-                "Could not sync DSIW74 to media-player channel %s: %s",
+                "Could not sync CANAL+ decoder to media-player channel %s: %s",
                 new_preset.name,
                 err,
             )
@@ -140,7 +140,7 @@ def _setup_media_player_sync(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up DSIW74 from a config entry."""
+    """Set up a CANAL+ decoder from a config entry."""
     client = DSIW74Client(
         entry.data[CONF_HOST],
         entry.data[CONF_PORT],
@@ -149,7 +149,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     try:
         info = await client.async_get_info()
     except DSIW74ConnectionError as err:
-        raise ConfigEntryNotReady(f"Cannot connect to DSIW74: {err}") from err
+        raise ConfigEntryNotReady(f"Cannot connect to CANAL+ decoder: {err}") from err
 
     presets_text = _entry_value(entry, CONF_CHANNEL_PRESETS, DEFAULT_PRESETS_TEXT)
     try:
@@ -191,5 +191,5 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload a DSIW74 config entry."""
+    """Unload a CANAL+ decoder config entry."""
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)

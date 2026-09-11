@@ -1,4 +1,4 @@
-"""Button entities forming a full DSIW74 remote control and channel presets."""
+"""Button entities forming a CANAL+ decoder remote control and channel presets."""
 
 from __future__ import annotations
 
@@ -84,7 +84,7 @@ async def async_setup_entry(
 
 
 class DSIW74Button(DSIW74Entity, ButtonEntity):
-    """A single DSIW74 remote key."""
+    """A single CANAL+ decoder remote key."""
 
     def __init__(self, entry: ConfigEntry, definition: ButtonDef) -> None:
         super().__init__(entry)
@@ -98,7 +98,7 @@ class DSIW74Button(DSIW74Entity, ButtonEntity):
         try:
             await self._client.async_send_key(self._definition.key)
         except DSIW74ConnectionError as err:
-            raise HomeAssistantError(f"DSIW74 communication error: {err}") from err
+            raise HomeAssistantError(f"CANAL+ decoder communication error: {err}") from err
 
 
 class DSIW74PresetButton(DSIW74Entity, ButtonEntity):
@@ -126,4 +126,4 @@ class DSIW74PresetButton(DSIW74Entity, ButtonEntity):
         try:
             await self._runtime.async_tune_preset(self._preset)
         except DSIW74ConnectionError as err:
-            raise HomeAssistantError(f"DSIW74 communication error: {err}") from err
+            raise HomeAssistantError(f"CANAL+ decoder communication error: {err}") from err

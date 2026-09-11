@@ -1,4 +1,4 @@
-"""Shared entity helpers for DSIW74."""
+"""Shared entity helpers for CANAL+ decoders."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from .const import DOMAIN
 
 
 class DSIW74Entity(Entity):
-    """Base DSIW74 entity."""
+    """Base CANAL+ decoder entity."""
 
     _attr_has_entity_name = True
 
@@ -29,8 +29,8 @@ class DSIW74Entity(Entity):
         return DeviceInfo(
             identifiers={(DOMAIN, self._info.serial)},
             name=self._entry.title,
-            manufacturer=self._info.manufacturer or "Sagemcom",
-            model=self._info.model or "DSIW74",
+            manufacturer=self._info.manufacturer or "CANAL+",
+            model=self._info.model or "CANAL+ decoder",
             serial_number=self._info.serial,
             sw_version=sw_version,
             configuration_url=self._client.base_url,

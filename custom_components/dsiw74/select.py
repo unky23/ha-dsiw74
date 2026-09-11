@@ -1,4 +1,4 @@
-"""Channel-preset select entity for Sagemcom DSIW74."""
+"""Channel-preset select entity for CANAL+ decoders."""
 
 from __future__ import annotations
 
@@ -45,11 +45,11 @@ class DSIW74PresetSelect(DSIW74Entity, SelectEntity):
         """Tune the channel associated with a preset name."""
         preset = self._presets_by_name.get(option)
         if preset is None:
-            raise HomeAssistantError(f"Unknown DSIW74 preset: {option}")
+            raise HomeAssistantError(f"Unknown CANAL+ decoder preset: {option}")
         try:
             await self._runtime.async_tune_preset(preset)
         except DSIW74ConnectionError as err:
-            raise HomeAssistantError(f"DSIW74 communication error: {err}") from err
+            raise HomeAssistantError(f"CANAL+ decoder communication error: {err}") from err
 
     async def async_added_to_hass(self) -> None:
         """Subscribe to preset changes made by buttons or media-player sync."""

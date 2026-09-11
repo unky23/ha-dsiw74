@@ -1,4 +1,4 @@
-"""Configurable channel presets for Sagemcom DSIW74."""
+"""Configurable channel presets for CANAL+ decoders."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import re
 
 @dataclass(frozen=True, slots=True)
 class ChannelPreset:
-    """A named DSIW74 channel preset."""
+    """A named CANAL+ decoder channel preset."""
 
     key: str
     name: str

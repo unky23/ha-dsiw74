@@ -1,4 +1,4 @@
-"""Config flow for Sagemcom DSIW74."""
+"""Config flow for compatible CANAL+ decoders."""
 
 from __future__ import annotations
 
@@ -55,7 +55,7 @@ def _normalize_presets(value: str) -> str:
 
 
 class DSIW74ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for DSIW74."""
+    """Handle a config flow for a CANAL+ decoder."""
 
     VERSION = 3
     MINOR_VERSION = 0
@@ -99,7 +99,7 @@ class DSIW74ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 except DSIW74ConnectionError:
                     errors["base"] = "cannot_connect"
                 except Exception:  # noqa: BLE001
-                    _LOGGER.exception("Unexpected error while connecting to DSIW74")
+                    _LOGGER.exception("Unexpected error while connecting to CANAL+ decoder")
                     errors["base"] = "unknown"
                 else:
                     await self.async_set_unique_id(info.serial)
@@ -121,7 +121,7 @@ class DSIW74ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         schema = vol.Schema(
             {
-                vol.Required(CONF_HOST, default="192.168.0.174"): str,
+                vol.Required(CONF_HOST, default="192.168.0.100"): str,
                 vol.Required(CONF_PORT, default=DEFAULT_PORT): cv.port,
                 vol.Required(CONF_NAME, default=DEFAULT_NAME): str,
                 vol.Required(CONF_ENCODER_URL, default=DEFAULT_ENCODER_URL): str,
@@ -150,7 +150,7 @@ class DSIW74OptionsFlow(OptionsFlowWithReload):
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> config_entries.ConfigFlowResult:
-        """Manage DSIW74 options."""
+        """Manage CANAL+ decoder options."""
         errors: dict[str, str] = {}
 
         if user_input is not None:

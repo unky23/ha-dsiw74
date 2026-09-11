@@ -1,6 +1,6 @@
 {
   "domain": "dsiw74",
-  "name": "Sagemcom DSIW74",
+  "name": "CANAL+ Decoder",
   "codeowners": [
     "@unky23"
   ],
@@ -10,5 +10,5 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/unky23/ha-dsiw74/issues",
   "requirements": [],
-  "version": "0.6.1"
+  "version": "0.7.0"
 }

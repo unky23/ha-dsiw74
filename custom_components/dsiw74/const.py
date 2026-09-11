@@ -1,9 +1,18 @@
-"""Constants for the Sagemcom DSIW74 integration."""
+"""Constants for the CANAL+ decoder integration."""
 
 DOMAIN = "dsiw74"
-DEFAULT_NAME = "DSIW74"
+DEFAULT_NAME = "Dekoder CANAL+"
 DEFAULT_PORT = 3030
 DEFAULT_TIMEOUT = 5
+
+# Models confirmed to expose the compatible CANAL+ / nc+ local remote API.
+# Model comparison ignores hyphens and spaces.
+SUPPORTED_MODELS = {
+    "DSIW74",
+    "NCP3670SF",
+    "NCP4740SF",
+    "USW4001NCP",
+}
 
 CONF_ENCODER_URL = "encoder_url"
 DEFAULT_ENCODER_URL = "http://192.168.0.14"
